@@ -130,11 +130,22 @@ class ShapeGrammar {
 
 
             //create two new subdivided shapes
-            var backLeft = new Shape(backLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'B'); 
-            var backRight = new Shape(backRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'B');
-            var frontLeft = new Shape(frontLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'B'); 
-            var frontRight = new Shape(frontRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'B');
-
+            var backLeft = new Shape(backLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A'); 
+            if(Math.random() < .4) {
+                backLeft.symbol = 'B';
+            }
+            var backRight = new Shape(backRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A');
+            if(Math.random() < .3) {
+                backRight.symbol = 'B';
+            }
+            var frontLeft = new Shape(frontLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A'); 
+            if(Math.random() < .2) {
+                frontLeft.symbol = 'B';
+            }
+            var frontRight = new Shape(frontRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A');
+            if(Math.random() < .34) {
+                frontRight.symbol = 'B';
+            }
 
             //create the geometries for these two shapes
             var houseBL = this.createHouse(backLeft.currPos);
@@ -161,6 +172,9 @@ class ShapeGrammar {
             newShapes[i+2] = frontLeft;
             newShapes[i+3] = frontRight;
         }
+        else if(symbol == 'B') {
+
+        }
 
         return newShapes;
     }
@@ -168,22 +182,35 @@ class ShapeGrammar {
     // Invoke renderSymbol for every shape in a list of shapes
     expandShapes(iterations: number) {
         var currentNode;
-        var newShapes= Array<Shape>();
+        var newShapes= new Array<Shape>();
+        var k = 0;
+        var newTotalShapes = new Array<Shape>();
         //iterate through list of shapes and for each shape, replace it with expanded
         for(var j = 0; j < iterations; j++) {
             for(var i = 0; i < this.shapeSet.length; i++) {
-            newShapes = this.expandShape(this.shapeSet[i], newShapes, i);
+                if(this.shapeSet[i] != null) {
+                newShapes = this.expandShape(this.shapeSet[i], newShapes, k);
+                k+= 4;
+                console.log(k);
+                }
+
             }
-        }
         this.shapeSet = newShapes;
+        newShapes = new Array<Shape>();
+        k = 0;
+ 
+        console.log(this.shapeSet);
+        }
 
     }
 
     //for each shape in list of shapes, add to meshDrawable
     renderShapes(meshDrawable: MeshDrawable) {
         for(var i = 0; i < this.shapeSet.length; i++) {
+            if(this.shapeSet[i] != null) {
             meshDrawable.addMeshComponent(this.shapeSet[i].geometry);
             console.log(this.shapeSet[i].geometry);
+            }
          }
          return meshDrawable;
     }

@@ -59,7 +59,7 @@ function loadScene() {
   var norVectors = ShapeGrammar.VBOtoVec4(groundPlane.normals);
   var groundRot = mat4.create();
   var invRot = mat4.create();
-  groundRot = mat4.rotateX(groundRot, groundRot, Math.PI * 110 / 180);
+  groundRot = mat4.rotateX(groundRot, groundRot, Math.PI * 90 / 180);
   invRot = mat4.transpose(invRot, groundRot);
   var groundScale = mat4.create();
   groundScale = mat4.scale(groundScale, groundScale, vec3.fromValues(10, 10, 10));
