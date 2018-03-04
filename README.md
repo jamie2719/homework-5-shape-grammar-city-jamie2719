@@ -1,3 +1,8 @@
+For my shape grammar, I started out with the basic house mesh. From there, I subdivided the house into 4 smaller houses. This operation was mapped to the symbol 'A'. Each of the new smaller houses then had a symbol 'B'. 'B' mapped to another case to add more detailed elements to the house. Within the 'B' case, there were 4 subcases: a house with a door, a house with a garage to the left, a house with a garage to the right, and a house with a chimney. 
+
+To layout my city, I looped over the area of the ground plane and randomly placed intial houses in each subsection of the plane. Each of these initial houses was then subdivided and made more detailed with each iteration.
+
+Demo link: https://jamie2719.github.io/homework-5-shape-grammar-city-jamie2719/
 
 # Project 5: Shape Grammar
 
