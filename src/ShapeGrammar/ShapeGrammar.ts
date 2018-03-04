@@ -13,12 +13,12 @@ class ShapeGrammar {
 
     constructor() {
         var defaultShape = new Shape(vec3.fromValues(0, 0, 0), vec3.fromValues(1, 1, 1), vec3.fromValues(0, 0, 0), 'A');
-        this.defaultHouse = new House(vec3.fromValues(0, 0, 0));
-        this.defaultHouse.loadMesh();
+        //this.defaultHouse = new House(vec3.fromValues(0, 0, 0));
+       // this.defaultHouse.loadMesh();
         //defaultShape.setHouse(this.defaultHouse);
-        defaultShape.geometry = this.defaultHouse;
-        this.shapeSet = new Array<Shape>();
-        this.shapeSet[0] = defaultShape;
+        //defaultShape.geometry = this.defaultHouse;
+        //this.shapeSet = new Array<Shape>();
+        //this.shapeSet[0] = defaultShape;
     }
 
 
@@ -122,30 +122,31 @@ class ShapeGrammar {
             var frontLeftPos = vec3.create();
             var frontRightPos = vec3.create();
 
-            backLeftPos = vec3.add(backLeftPos, currShape.currPos, vec3.fromValues(quartScale[0], 0, quartScaleN[2])); //change to currpos+currPos/2
-            backRightPos = vec3.add(backRightPos, currShape.currPos, vec3.fromValues(quartScaleN[0], 0, quartScaleN[2])); //change to currpos-currPos/2
-            frontLeftPos = vec3.add(frontLeftPos, currShape.currPos, vec3.fromValues(quartScale[0], 0, quartScale[2])); //change to currpos+currPos/2
-            frontRightPos = vec3.add(frontRightPos, currShape.currPos, vec3.fromValues(quartScaleN[0], 0, quartScale[2])); //change to currpos-currPos/2
+
+            backLeftPos = vec3.add(backLeftPos, currShape.currPos, vec3.fromValues(quartScale[0] * 2 * Math.random(), 0, quartScaleN[2] * 2)); //change to currpos+currPos/2
+            backRightPos = vec3.add(backRightPos, currShape.currPos, vec3.fromValues(quartScaleN[0] * 2 * Math.random(), 0, quartScaleN[2] * 2)); //change to currpos-currPos/2
+            frontLeftPos = vec3.add(frontLeftPos, currShape.currPos, vec3.fromValues(quartScale[0] * 2 * Math.random(), 0, quartScale[2] * 2)); //change to currpos+currPos/2
+            frontRightPos = vec3.add(frontRightPos, currShape.currPos, vec3.fromValues(quartScaleN[0] * 2 * Math.random(), 0, quartScale[2] * 2)); //change to currpos-currPos/2
 
 
 
             //create two new subdivided shapes
-            var backLeft = new Shape(backLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A'); 
-            if(Math.random() < .4) {
-                backLeft.symbol = 'B';
-            }
-            var backRight = new Shape(backRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A');
-            if(Math.random() < .3) {
-                backRight.symbol = 'B';
-            }
-            var frontLeft = new Shape(frontLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A'); 
-            if(Math.random() < .2) {
-                frontLeft.symbol = 'B';
-            }
-            var frontRight = new Shape(frontRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2]), currShape.currRot, 'A');
-            if(Math.random() < .34) {
-                frontRight.symbol = 'B';
-            }
+            var backLeft = new Shape(backLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2] * (Math.random() + 1)), currShape.currRot, 'B'); 
+            // if(Math.random() < .4) {
+            //     backLeft.symbol = 'B';
+            // }
+            var backRight = new Shape(backRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2] * (Math.random() + 1)), currShape.currRot, 'B');
+            // if(Math.random() < .62) {
+            //     backRight.symbol = 'B';
+            // }
+            var frontLeft = new Shape(frontLeftPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2] * (Math.random() + 1)), currShape.currRot, 'B'); 
+            // if(Math.random() < .58) {
+            //     frontLeft.symbol = 'B';
+            // }
+            var frontRight = new Shape(frontRightPos, vec3.fromValues(halfScale[0], Math.random(), halfScale[2] * (Math.random() + 1)), currShape.currRot, 'B');
+            // if(Math.random() < .53) {
+            //     frontRight.symbol = 'B';
+            // }
 
             //create the geometries for these two shapes
             var houseBL = this.createHouse(backLeft.currPos);
@@ -173,11 +174,117 @@ class ShapeGrammar {
             newShapes[i+3] = frontRight;
         }
         else if(symbol == 'B') {
+            var halfScale = vec3.create();
+            halfScale = vec3.scale(halfScale, currShape.currScale, .5);
 
+            var halfScaleN = vec3.create();
+            halfScaleN = vec3.scale(halfScaleN, halfScale, -1);
+
+            var quartScale = vec3.create();
+            quartScale = vec3.scale(quartScale, halfScale, .5);
+
+            var quartScaleN = vec3.create();
+            quartScaleN = vec3.scale(quartScaleN, halfScaleN, .5);
+
+       
+
+            var backLeftPos = vec3.create();
+            var backRightPos = vec3.create();
+            var frontLeftPos = vec3.create();
+            var frontRightPos = vec3.create();
+
+            var mainPos = vec3.create();
+            var subPos = vec3.create();
+
+            var rand = Math.random();
+
+            //main house with door
+            if(rand < .4) {
+                mainPos = vec3.add(mainPos, currShape.currPos, vec3.fromValues(0, 0, quartScaleN[2])); 
+                subPos = vec3.add(subPos, currShape.currPos, vec3.fromValues(0, 0, halfScale[2])); 
+
+                var main = new Shape(mainPos, vec3.fromValues(halfScale[0], Math.random() + 1, halfScale[2] + .5), currShape.currRot, 'B'); 
+                var sub = new Shape(subPos, vec3.fromValues(quartScale[0], Math.random() + .5, halfScale[2]+.5), currShape.currRot, 'B'); 
+            
+                var houseMain = this.createHouse(main.currPos);
+                var houseSub = this.createHouse(sub.currPos);
+
+                houseMain = this.transformHouse(houseMain, main.computeScaleMat(), main.computeRotMat(), main.currPos);
+                houseSub = this.transformHouse(houseSub, sub.computeScaleMat(), sub.computeRotMat(), sub.currPos);
+
+                main.setHouse(houseMain);
+                sub.setHouse(houseSub);
+
+                newShapes[i] = main;
+                newShapes[i+1] = sub;
+           }
+
+           //main house with chimney/tower
+           if(rand < .6) {
+                mainPos = vec3.add(mainPos, currShape.currPos, vec3.fromValues(0, 0, quartScale[2])); 
+                subPos = vec3.add(subPos, currShape.currPos, vec3.fromValues(quartScale[0], halfScale[1],  quartScale[2])); 
+
+                var main = new Shape(mainPos, vec3.fromValues(halfScale[0], Math.random() + .75, halfScale[2] + .5), currShape.currRot, 'B'); 
+                var sub = new Shape(subPos, vec3.fromValues(quartScale[0], Math.random()+.5, quartScale[2]), currShape.currRot, 'B'); 
+            
+                var houseMain = this.createHouse(main.currPos);
+                var houseSub = this.createHouse(sub.currPos);
+
+                houseMain = this.transformHouse(houseMain, main.computeScaleMat(), main.computeRotMat(), main.currPos);
+                houseSub = this.transformHouse(houseSub, sub.computeScaleMat(), sub.computeRotMat(), sub.currPos);
+
+                main.setHouse(houseMain);
+                sub.setHouse(houseSub);
+
+                newShapes[i] = main;
+                newShapes[i+1] = sub;
+           }
+
+           //main house with left garage
+           else if(rand < .8) {
+                mainPos = vec3.add(mainPos, currShape.currPos, vec3.fromValues(quartScale[0], 0, 0)); //change to currpos+currPos/2
+                subPos = vec3.add(subPos, currShape.currPos, vec3.fromValues(quartScaleN[0], 0, 0));
+
+                var main = new Shape(mainPos, vec3.fromValues(halfScale[0], Math.random() + 1, halfScale[2] + .5), currShape.currRot, 'B'); 
+                var sub = new Shape(subPos, vec3.fromValues(quartScale[0], Math.random() + .5, halfScale[2]), currShape.currRot, 'B'); 
+            
+                var houseMain = this.createHouse(main.currPos);
+                var houseSub = this.createHouse(sub.currPos);
+
+                houseMain = this.transformHouse(houseMain, main.computeScaleMat(), main.computeRotMat(), main.currPos);
+                houseSub = this.transformHouse(houseSub, sub.computeScaleMat(), sub.computeRotMat(), sub.currPos);
+
+                main.setHouse(houseMain);
+                sub.setHouse(houseSub);
+
+                newShapes[i] = main;
+                newShapes[i+1] = sub;
+           } 
+            //main house with right garage    
+            else if(rand < 1) {
+                mainPos = vec3.add(mainPos, currShape.currPos, vec3.fromValues(quartScaleN[0], 0, 0)); //change to currpos+currPos/2
+                subPos = vec3.add(subPos, currShape.currPos, vec3.fromValues(quartScale[0], 0, 0));
+
+                var main = new Shape(mainPos, vec3.fromValues(halfScale[0], Math.random() + 1, halfScale[2] + .5), currShape.currRot, 'B'); 
+                var sub = new Shape(subPos, vec3.fromValues(quartScale[0], Math.random() + .5, halfScale[2]), currShape.currRot, 'B'); 
+            
+                var houseMain = this.createHouse(main.currPos);
+                var houseSub = this.createHouse(sub.currPos);
+
+                houseMain = this.transformHouse(houseMain, main.computeScaleMat(), main.computeRotMat(), main.currPos);
+                houseSub = this.transformHouse(houseSub, sub.computeScaleMat(), sub.computeRotMat(), sub.currPos);
+
+                main.setHouse(houseMain);
+                sub.setHouse(houseSub);
+
+                newShapes[i] = main;
+                newShapes[i+1] = sub;
         }
+    }
 
         return newShapes;
     }
+
 
     // Invoke renderSymbol for every shape in a list of shapes
     expandShapes(iterations: number) {
@@ -208,8 +315,9 @@ class ShapeGrammar {
     renderShapes(meshDrawable: MeshDrawable) {
         for(var i = 0; i < this.shapeSet.length; i++) {
             if(this.shapeSet[i] != null) {
+                console.log(this.shapeSet[i].geometry);
             meshDrawable.addMeshComponent(this.shapeSet[i].geometry);
-            console.log(this.shapeSet[i].geometry);
+     
             }
          }
          return meshDrawable;

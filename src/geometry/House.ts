@@ -20,7 +20,7 @@ class House extends MeshDrawable {
     loadMesh() {
       const canvas = <HTMLCanvasElement> document.getElementById('canvas');
       var gl = <WebGL2RenderingContext> canvas.getContext('webgl2');
-      var objStr = document.getElementById('cube.obj').innerHTML;
+      var objStr = document.getElementById('house.obj').innerHTML;
         
       var mesh = new OBJ.Mesh(objStr);
       OBJ.initMeshBuffers(gl, mesh);
@@ -32,14 +32,14 @@ class House extends MeshDrawable {
 
       var j = 0;
       for(var i = 0; i < mesh.vertices.length; i+=3) {
-        // this.positions[j] = mesh.vertices[i] + this.center[0];
-        // this.positions[j+1] = mesh.vertices[i+1] + this.center[1];
-        // this.positions[j+2] = mesh.vertices[i+2] + this.center[2];
-        // this.positions[j+3] = 1;
-        this.positions[j] = mesh.vertices[i];
-        this.positions[j+1] = mesh.vertices[i+1];
-        this.positions[j+2] = mesh.vertices[i+2];
+        this.positions[j] = mesh.vertices[i] + this.center[0];
+        this.positions[j+1] = mesh.vertices[i+1] + this.center[1];
+        this.positions[j+2] = mesh.vertices[i+2] + this.center[2];
         this.positions[j+3] = 1;
+        // this.positions[j] = mesh.vertices[i];
+        // this.positions[j+1] = mesh.vertices[i+1];
+        // this.positions[j+2] = mesh.vertices[i+2];
+        // this.positions[j+3] = 1;
         j+=4;
       }
 

@@ -20,6 +20,8 @@ import Branch from './geometry/Branch';
 import Leaf from './geometry/Leaf';
 import Trunk from './geometry/Trunk';
 import ShapeGrammar from './ShapeGrammar/ShapeGrammar';
+import House from './geometry/House';
+import Shape from './ShapeGrammar/Shape';
 
 // Define an object with application parameters and button callbacks
 // This will be referred to by dat.GUI's functions that add GUI elements.
@@ -71,11 +73,26 @@ function loadScene() {
   groundPlane.create();
 
 
+  for(var i = -4; i < 6; i++) {
+    for(var j = -4; j < 6; j++) {
+      if(Math.random() < .6) {
+        var currQuad = vec3.fromValues(i - Math.random(), 0, j - Math.random());
+        var currHouse = new House(currQuad);
+        currHouse.loadMesh();
+        var currShape = new Shape(currQuad, vec3.fromValues(1, 1, 1), vec3.fromValues(0, 0, 0), 'A');
+        currShape.geometry = currHouse;
+        shapeGrammar.defaultHouse = currHouse;
+        shapeGrammar.shapeSet = [currShape];
+        shapeGrammar.expandShapes(controls.Iterations);
+        meshDrawable = shapeGrammar.renderShapes(meshDrawable);
+      }
+    }
+  }
   
 
   //meshDrawable.addMeshComponent(shapeGrammar.defaultHouse);
-  shapeGrammar.expandShapes(controls.Iterations);
-  meshDrawable = shapeGrammar.renderShapes(meshDrawable);
+  // shapeGrammar.expandShapes(controls.Iterations);
+  // meshDrawable = shapeGrammar.renderShapes(meshDrawable);
   
 
   // lsystem = new LSystem(controls.Axiom, controls.Iterations);
